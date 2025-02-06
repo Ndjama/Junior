@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Wi-Fi Zone - Connexion Satellite StarLink</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; color: #333; }
+        .container { max-width: 800px; margin: auto; }
+        .header { text-align: center; }
+        h1 { color: #0066CC; }
+        .pricing-table { display: flex; justify-content: space-between; margin-top: 30px; }
+        .pricing-box {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            width: 30%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .pricing-box h3 { font-size: 24px; margin-bottom: 10px; color: #0066CC; }
+        .pricing-box p { font-size: 18px; color: #333; }
+        .payment-methods img { width: 50px; margin: 5px; }
+        .btn {
+            background-color: #0066CC; /* Couleur bleue */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn:hover { background-color: #004a99; }
+        .marketing-section {
+            background-color: #e0f7ff;
+            padding: 20px;
+            margin-top: 40px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        footer { background-color: #0066CC; color: white; padding: 20px; text-align: center; margin-top: 40px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Bienvenue sur notre Wi-Fi Zone</h1>
+        <p>Profitez d'une connexion internet rapide et fiable grâce à notre Wi-Fi Zone alimentée par <strong>Starlink</strong> !</p>
+    </div>
+
+    <div class="marketing-section">
+        <h2>Pourquoi choisir notre service ?</h2>
+        <p>Nous vous offrons une connexion ultra-rapide via <strong>Starlink</strong>, un réseau satellite innovant permettant d'obtenir une couverture internet même dans les zones les plus isolées. Dites adieu aux coupures de réseau et aux lenteurs, et profitez d'une connexion stable, où que vous soyez !</p>
+    </div>
+
+    <p>Choisissez votre forfait Wi-Fi :</p>
+
+    <div class="pricing-table">
+        <div class="pricing-box">
+            <h3>24 heures</h3>
+            <p>300 FCFA</p>
+            <div class="payment-methods">
+                <img src="orangemoney_logo.png" alt="OrangeMoney">
+                <img src="mtnmoney_logo.png" alt="MTN Mobile Money">
+            </div>
+            <button class="btn" onclick="startPayment(300, '24h')">Acheter</button>
+        </div>
+
+        <div class="pricing-box">
+            <h3>48 heures</h3>
+            <p>500 FCFA</p>
+            <div class="payment-methods">
+                <img src="orangemoney_logo.png" alt="OrangeMoney">
+                <img src="mtnmoney_logo.png" alt="MTN Mobile Money">
+            </div>
+            <button class="btn" onclick="startPayment(500, '48h')">Acheter</button>
+        </div>
+
+        <div class="pricing-box">
+            <h3>1 mois</h3>
+            <p>2000 FCFA</p>
+            <div class="payment-methods">
+                <img src="orangemoney_logo.png" alt="OrangeMoney">
+                <img src="mtnmoney_logo.png" alt="MTN Mobile Money">
+            </div>
+            <button class="btn" onclick="startPayment(2000, '1 mois')">Acheter</button>
+        </div>
+    </div>
+
+    <div id="ticketCode" style="display:none; margin-top: 20px; font-size: 18px; text-align: center;"></div>
+</div>
+
+<script>
+// Fonction qui déclenche le paiement sur CinetPay
+function startPayment(amount, duration) {
+    // Exécution de la requête pour le paiement via CinetPay
+    fetch('/initiate-payment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ amount: amount, duration: duration })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Affichage du code du ticket si le paiement est validé
+            setTimeout(() => {
+                document.getElementById('ticketCode').style.display = 'block';
+                document.getElementById('ticketCode').innerText = `Votre code Wi-Fi est : ${data.ticket_code}`;
+            }, 10000);  // 10 secondes avant d'afficher le code
+        } else {
+            alert('Échec du paiement');
+        }
+    });
+}
+</script>
+
+<!-- Pied de page avec le Copyright -->
+<footer>
+    <p>&copy; 2025 Juniors Entreprises. Tous droits réservés.</p>
+</footer>
+
+</body>
+</html>
